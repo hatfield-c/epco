@@ -29,7 +29,7 @@ public class StreamManager : MonoBehaviour
                 output += $" {data[j]},";
             }
 
-            Debug.Log(output);
+            //Debug.Log(output);
         }
     }
 }
