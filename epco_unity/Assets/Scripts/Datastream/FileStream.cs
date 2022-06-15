@@ -6,15 +6,24 @@ using UnityEngine;
 
 public class FileStream : MonoBehaviour, DataStreamInterface {
     [SerializeField]
-    protected string streamId = null;
+    protected string streamId = "unnamed_filestream";
 
     [SerializeField]
     protected string filePath = null;
 
-    protected StreamReader reader = null;
-    protected int eventCount = 0;
+    [SerializeField]
     protected int eventSize = 0;
 
+    [SerializeField]
+    protected List<float> upperBounds = null;
+
+    [SerializeField]
+    protected List<float> lowerBounds = null;
+
+    protected StreamReader reader = null;
+    protected int eventCount = 0;
+    protected int reportedSize = 0;
+    
     protected float currentTime = 0;
     protected float[] currentData = null;
 
@@ -27,10 +36,22 @@ public class FileStream : MonoBehaviour, DataStreamInterface {
         string line = this.reader.ReadLine();
         string[] data = line.Split(',');
         this.eventCount = Int32.Parse(data[0]);
-        this.eventSize = Int32.Parse(data[1]);
+        this.reportedSize = Int32.Parse(data[1]);
+
+        if (this.eventSize != this.reportedSize) {
+            Debug.LogError("Given event size does not match reported event size in file. Defaulting to given size.");
+        }
 
         this.currentData = new float[this.eventSize];
         this.nextData = new float[this.eventSize];
+    }
+
+    public List<float> GetUpperBounds() {
+        return this.upperBounds;
+    }
+
+    public List<float> GetLowerBounds() {
+        return this.lowerBounds;
     }
 
     public float[] GetData(float currentTime) {
@@ -55,8 +76,16 @@ public class FileStream : MonoBehaviour, DataStreamInterface {
         return this.currentData;
     }
 
+    public int GetSize() {
+        return this.eventSize;
+    }
+
     public string GetId() {
         return this.streamId;
+    }
+
+    public string GetStreamType() {
+        return "filestream";
     }
 
     protected float[] parseEventData(string raw) {
