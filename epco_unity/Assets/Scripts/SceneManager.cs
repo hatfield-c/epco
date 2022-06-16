@@ -13,6 +13,12 @@ public class SceneManager : MonoBehaviour
     [SerializeField]
     protected TrainGenerator trainGenerator = null;
 
+    void FixedUpdate() {
+        Debug.Log(
+            this.constraintManager.IsValid(this.streamManager.GetSources())
+        );
+    }
+
     public void GenerateTrainingData() {
         this.trainGenerator.GenerateData();
     }

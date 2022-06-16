@@ -5,4 +5,6 @@ using UnityEngine;
 public interface ConstraintInterface
 {
     bool IsValid(Dictionary<string, DataStreamInterface> sources);
+    string GetId();
+    string GetConstraintType();
 }

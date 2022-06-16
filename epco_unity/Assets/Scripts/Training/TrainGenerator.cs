@@ -28,13 +28,19 @@ public class TrainGenerator : MonoBehaviour
         string path = "Assets/" + filePath;
         StreamWriter writer = new StreamWriter(path);
 
-        List<float[]> bounds = this.CompileBounds();
+        
+        Dictionary<string, float[]> sample;
 
         for (int i = 0; i < this.samples; i++) {
-            float[] sample = this.GenerateSample(bounds);
+            
+            sample = this.GenerateSample();
+            this.ApplySample(sample);
+
             string encoded = this.EncodeSample(sample);
 
-            if (this.constraintManager.IsValid(sample)) {
+            if (
+                this.constraintManager.IsValid(this.streamManager.GetSources())
+            ) {
                 encoded += ",1";
             } else {
                 encoded += ",0";
@@ -46,53 +52,58 @@ public class TrainGenerator : MonoBehaviour
         writer.Close();
     }
 
-    protected float[] GenerateSample(List<float[]> bounds) {
-        int featureSize = bounds.Count;
+    protected void ApplySample(Dictionary<string, float[]> sample) {
+        List<string> sourceIds = this.streamManager.GetSourceIds();
+        Dictionary<string, DataStreamInterface> sources = this.streamManager.GetSources();
 
-        float[] sample = new float[featureSize];
+        for (int i = 0; i < sourceIds.Count; i++) {
+            string sourceId = sourceIds[i];
+            DataStreamInterface source = sources[sourceId];
+            float[] data = sample[sourceId];
 
-        for(int i = 0; i < featureSize; i++) {
-            sample[i] = UnityEngine.Random.Range(bounds[i][0], bounds[i][1]);
+            source.SetData(data);
+        }
+    }
+
+    protected Dictionary<string, float[]> GenerateSample() {
+        Dictionary<string, (List<float>, List<float>)> bounds = this.streamManager.GetBounds();
+        List<string> sourceIds = this.streamManager.GetSourceIds();
+
+        Dictionary<string, float[]> sample = new Dictionary<string, float[]>();
+
+        for (int i = 0; i < sourceIds.Count; i++) {
+            string sourceId = sourceIds[i];
+            (List<float> lowerBounds, List<float> upperBounds) = bounds[sourceId];
+
+            float[] data = new float[lowerBounds.Count];
+            for(int j = 0; j < lowerBounds.Count; j++) {
+                data[i] = UnityEngine.Random.Range(lowerBounds[i], upperBounds[i]);
+            }
+
+            sample[sourceId] = data;
         }
 
         return sample;
     }
 
-    protected string EncodeSample(float[] sample) {
+    protected string EncodeSample(Dictionary<string, float[]> sample) {
+        List<string> sourceIds = this.streamManager.GetSourceIds();
+
         string encoded = "";
 
-        for (int i = 0; i < sample.Length; i++) {
-            encoded += sample[i].ToString();
+        for (int i = 0; i < sourceIds.Count; i++) {
+            string sourceId = sourceIds[i];
+            float[] data = sample[sourceId];
 
-            if(i < sample.Length - 1) {
-                encoded += ",";
+            for(int j = 0; j < data.Length; j++) {
+                encoded += data[j].ToString();
+
+                if (i < sourceIds.Count - 1 || j < data.Length - 1) {
+                    encoded += ",";
+                }
             }
         }
 
         return encoded;
-    }
-
-    protected List<float[]> CompileBounds() {
-        List<float[]> allBounds = new List<float[]>();
-
-        List<string> sourceIds = this.streamManager.GetSourceIds();
-        Dictionary<string, DataStreamInterface> sources = this.streamManager.GetSources();
-        
-        for(int i = 0; i < this.streamManager.GetStreamCount(); i++) {
-            string sourceId = sourceIds[i];
-
-            List<float> upperBounds = sources[sourceId].GetUpperBounds();
-            List<float> lowerBounds = sources[sourceId].GetLowerBounds();
-
-            for(int j = 0; j < upperBounds.Count; j++) {
-                float[] bounds = new float[2];
-                bounds[0] = lowerBounds[j];
-                bounds[1] = upperBounds[j];
-
-                allBounds.Add(bounds);
-            }
-        }
-
-        return allBounds;
     }
 }

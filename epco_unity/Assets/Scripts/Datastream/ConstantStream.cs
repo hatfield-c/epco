@@ -16,12 +16,8 @@ public class ConstantStream : MonoBehaviour, DataStreamInterface
     [SerializeField]
     protected List<float> lowerBounds = null;
 
-    public List<float> GetUpperBounds() {
-        return this.upperBounds;
-    }
-
-    public List<float> GetLowerBounds() {
-        return this.lowerBounds;
+    public (List<float>, List<float>) GetBounds() {
+        return (this.lowerBounds, this.upperBounds);
     }
 
     public int GetSize() {
@@ -30,6 +26,10 @@ public class ConstantStream : MonoBehaviour, DataStreamInterface
 
     public float[] GetData(float currentTime) {
         return this.data;
+    }
+
+    public void SetData(float[] data) {
+        this.data = data;
     }
 
     public string GetStreamType() {

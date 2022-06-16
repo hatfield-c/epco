@@ -6,7 +6,7 @@ public interface DataStreamInterface {
     string GetStreamType();
     string GetId();
     float[] GetData(float currentTime);
-    List<float> GetUpperBounds();
-    List<float> GetLowerBounds();
+    void SetData(float[] data);
+    (List<float>, List<float>) GetBounds();
     int GetSize();
 }

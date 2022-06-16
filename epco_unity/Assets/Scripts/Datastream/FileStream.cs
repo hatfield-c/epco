@@ -46,12 +46,8 @@ public class FileStream : MonoBehaviour, DataStreamInterface {
         this.nextData = new float[this.eventSize];
     }
 
-    public List<float> GetUpperBounds() {
-        return this.upperBounds;
-    }
-
-    public List<float> GetLowerBounds() {
-        return this.lowerBounds;
+    public (List<float>, List<float>) GetBounds() {
+        return (this.lowerBounds, this.upperBounds);
     }
 
     public float[] GetData(float currentTime) {
@@ -74,6 +70,10 @@ public class FileStream : MonoBehaviour, DataStreamInterface {
         }
 
         return this.currentData;
+    }
+
+    public void SetData(float[] data) {
+        this.currentData = data;
     }
 
     public int GetSize() {
