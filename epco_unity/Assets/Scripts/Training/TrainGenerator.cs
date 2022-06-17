@@ -6,17 +6,20 @@ using UnityEngine;
 
 public class TrainGenerator : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField]
     protected StreamManager streamManager = null;
 
     [SerializeField]
     protected ConstraintManager constraintManager = null;
 
-    [SerializeField]
-    protected int samples = 0;
-
+    [Header("Files")]
     [SerializeField]
     protected string filePath = null;
+
+    [Header("Parameters")]
+    [SerializeField]
+    protected int samples = 0;
 
     public void GenerateData()
     {
