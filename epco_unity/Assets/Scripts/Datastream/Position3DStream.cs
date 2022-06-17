@@ -8,7 +8,7 @@ public class Position3DStream : MonoBehaviour, DataStreamInterface
     protected string objectId = "unnamed_position3d";
 
     [SerializeField]
-    protected Transform position = null;
+    protected Transform target = null;
 
     [SerializeField]
     protected List<float> lowerBounds = new List<float>();
@@ -19,15 +19,15 @@ public class Position3DStream : MonoBehaviour, DataStreamInterface
     protected float[] buffer = new float[3];
 
     public float[] GetData(float currentTime) {
-        this.buffer[0] = this.transform.position.x;
-        this.buffer[1] = this.transform.position.y;
-        this.buffer[2] = this.transform.position.z;
+        this.buffer[0] = this.target.position.x;
+        this.buffer[1] = this.target.position.y;
+        this.buffer[2] = this.target.position.z;
 
         return this.buffer;
     }
 
     public void SetData(float[] data) {
-        this.position.position = new Vector3(
+        this.target.position = new Vector3(
             data[0],
             data[1],
             data[2]

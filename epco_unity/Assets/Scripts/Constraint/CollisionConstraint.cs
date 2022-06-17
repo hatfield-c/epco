@@ -7,24 +7,12 @@ public class CollisionConstraint : MonoBehaviour, ConstraintInterface {
     protected string constraintId = "unnamed_collision";
 
     [SerializeField]
-    protected GameObject agent = null;
-
-    protected bool isColliding = false;
-
-    void OnTriggerEnter(Collider other) {
-        if (other.gameObject == this.agent) {
-            this.isColliding = true;
-        }
-    }
-
-    void OnTriggerExit(Collider other) {
-        if(other.gameObject == this.agent) {
-            this.isColliding = false;
-        }
-    }
+    protected Transform agent = null;
 
     public bool IsValid(Dictionary<string, DataStreamInterface> sources) {
-        return this.isColliding;
+        bool isCollision = Physics.CheckSphere(this.agent.position, this.agent.localScale.x / 2);
+
+        return !isCollision;
     }
 
     public string GetId() {

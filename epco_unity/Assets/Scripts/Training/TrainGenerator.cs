@@ -20,11 +20,6 @@ public class TrainGenerator : MonoBehaviour
 
     public void GenerateData()
     {
-        if (!Application.isPlaying) {
-            Debug.LogError("Error: You must be in Play mode to generate training data.");
-            return;
-        }
-
         string path = "Assets/" + filePath;
         StreamWriter writer = new StreamWriter(path);
 
