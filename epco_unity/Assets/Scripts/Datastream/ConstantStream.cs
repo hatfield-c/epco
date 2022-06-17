@@ -16,8 +16,15 @@ public class ConstantStream : MonoBehaviour, DataStreamInterface
     [SerializeField]
     protected List<float> lowerBounds = null;
 
-    public (List<float>, List<float>) GetBounds() {
-        return (this.lowerBounds, this.upperBounds);
+    protected List<List<float>> bounds = new List<List<float>>();
+
+    void Start() {
+        this.bounds.Add(this.lowerBounds);
+        this.bounds.Add(this.upperBounds);
+    }
+
+    public List<List<float>> GetBounds() {
+        return this.bounds;
     }
 
     public int GetSize() {

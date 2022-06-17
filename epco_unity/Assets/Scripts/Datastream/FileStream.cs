@@ -20,6 +20,7 @@ public class FileStream : MonoBehaviour, DataStreamInterface {
     [SerializeField]
     protected List<float> lowerBounds = null;
 
+    protected List<List<float>> bounds = new List<List<float>>();
     protected StreamReader reader = null;
     protected int eventCount = 0;
     protected int reportedSize = 0;
@@ -44,10 +45,13 @@ public class FileStream : MonoBehaviour, DataStreamInterface {
 
         this.currentData = new float[this.eventSize];
         this.nextData = new float[this.eventSize];
+
+        this.bounds.Add(this.lowerBounds);
+        this.bounds.Add(this.upperBounds);
     }
 
-    public (List<float>, List<float>) GetBounds() {
-        return (this.lowerBounds, this.upperBounds);
+    public List<List<float>> GetBounds() {
+        return this.bounds;
     }
 
     public float[] GetData(float currentTime) {

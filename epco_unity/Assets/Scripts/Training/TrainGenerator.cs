@@ -61,20 +61,24 @@ public class TrainGenerator : MonoBehaviour
     }
 
     protected Dictionary<string, float[]> GenerateSample() {
-        Dictionary<string, (List<float>, List<float>)> bounds = this.streamManager.GetBounds();
+        Dictionary<string, List<List<float>>> bounds = this.streamManager.GetBounds();
         List<string> sourceIds = this.streamManager.GetSourceIds();
 
         Dictionary<string, float[]> sample = new Dictionary<string, float[]>();
 
         for (int i = 0; i < sourceIds.Count; i++) {
+            
             string sourceId = sourceIds[i];
-            (List<float> lowerBounds, List<float> upperBounds) = bounds[sourceId];
+
+            List<List<float>> sourceBounds = bounds[sourceId];
+            List<float> lowerBounds = sourceBounds[0];
+            List<float> upperBounds = sourceBounds[1];
 
             float[] data = new float[lowerBounds.Count];
             for(int j = 0; j < lowerBounds.Count; j++) {
-                data[i] = UnityEngine.Random.Range(lowerBounds[i], upperBounds[i]);
+                data[j] = UnityEngine.Random.Range(lowerBounds[j], upperBounds[j]);
             }
-
+            
             sample[sourceId] = data;
         }
 

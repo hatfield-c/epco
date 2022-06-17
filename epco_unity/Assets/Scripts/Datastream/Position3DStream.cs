@@ -16,7 +16,13 @@ public class Position3DStream : MonoBehaviour, DataStreamInterface
     [SerializeField]
     protected List<float> upperBounds = new List<float>();
 
+    protected List<List<float>> bounds = new List<List<float>>();
     protected float[] buffer = new float[3];
+
+    void Start() {
+        this.bounds.Add(this.lowerBounds);
+        this.bounds.Add(this.upperBounds);
+    }
 
     public float[] GetData(float currentTime) {
         this.buffer[0] = this.target.position.x;
@@ -38,8 +44,8 @@ public class Position3DStream : MonoBehaviour, DataStreamInterface
         return this.objectId;
     }
 
-    public (List<float>, List<float>) GetBounds() {
-        return (this.lowerBounds, this.upperBounds);
+    public List<List<float>> GetBounds() {
+        return this.bounds;
     }
 
     public int GetSize() {

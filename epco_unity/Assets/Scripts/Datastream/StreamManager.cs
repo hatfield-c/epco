@@ -9,7 +9,7 @@ public class StreamManager : MonoBehaviour
 
     protected List<string> sourceIds = new List<string>();
     protected Dictionary<string, DataStreamInterface> sources = new Dictionary<string, DataStreamInterface>();
-    protected Dictionary<string, (List<float>, List<float>)> bounds = new Dictionary<string, (List<float>, List<float>)>();
+    protected Dictionary<string, List<List<float>>> bounds = new Dictionary<string, List<List<float>>>();
 
     void Start()
     {
@@ -19,7 +19,7 @@ public class StreamManager : MonoBehaviour
         for(int i = 0; i < this.sourceObjects.Count; i++) {
             source = this.sourceObjects[i].GetComponent<DataStreamInterface>();
             sourceId = source.GetId();
-            (List<float>, List<float>) source_bounds = source.GetBounds();
+            List<List<float>> source_bounds = source.GetBounds();
 
             this.sourceIds.Add(sourceId);
             this.sources.Add(sourceId, source);
@@ -54,7 +54,7 @@ public class StreamManager : MonoBehaviour
         return this.sources;
     }
 
-    public Dictionary<string, (List<float>, List<float>)> GetBounds() {
+    public Dictionary<string, List<List<float>>> GetBounds() {
         return this.bounds;
     }
 
