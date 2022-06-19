@@ -20,6 +20,7 @@ class Trainer:
 		start_total = time.time()
 	
 		for e in range(CONFIG.epochs):
+			remaining_epochs = CONFIG.epochs - e - 1
 			
 			if self.shouldPrint_e(e):
 				print("\nEpoch:", e)
@@ -30,19 +31,27 @@ class Trainer:
 				batch_data, batch_targets = dataLoader.DrawSamples(CONFIG.batch_size)
 				
 				preds = model(batch_data)
-				loss = nn.MSELoss()(preds, batch_targets)
+				loss = nn.BCELoss()(preds, batch_targets)
 				optimizer.zero_grad()
 				loss.backward()
 				optimizer.step()
 	
 				if self.shouldPrint_b(b) and self.shouldPrint_e(e):
-					eta = (avgTime * (CONFIG.epochs - e - 1) * (CONFIG.epoch_size)) + (avgTime * (CONFIG.epoch_size - b - 1))
+					remaining_batches = (CONFIG.epoch_size - b - 1) + (remaining_epochs * CONFIG.epoch_size)
+					eta = avgTime * remaining_batches
+					eta = str(eta / 60)
+					eta = eta
 					
-					print("   [", b, "/", CONFIG.epoch_size - 1, ":", b / (CONFIG.epoch_size - 1),  "]")
-					print("	 Loss	 :", loss.item())
-					print("	 Accuracy :", metrics.Accuracy(orig_x, orig_y, model))
-					print("	 Avg. Time:", avgTime)
-					print("	 ETA	  :", max(1, int(eta / 60)), "mins")
+					completion = str(100 *(b / (CONFIG.epoch_size)))
+					completion = completion[:4] + "%"
+					
+					print("   [", b, "/", CONFIG.epoch_size - 1, ":", completion,  "]")
+					print("    Loss	 :", loss.item())
+					print("    Accuracy :", metrics.Accuracy(orig_x, orig_y, model))
+					print("")
+					print("    Batches left :", remaining_batches)
+					print("    Avg. Time    :", "{:.2f}".format(avgTime), "s")
+					print("    ETA	      :", eta, "mins")
 					print("\n")
 					
 				avgTime = (avgTime + (time.time() - start_b)) / 2

@@ -10,10 +10,10 @@ class Metrics:
 		error = 0
 		
 		for i in range(total):
-			if pred[i][0] > 0 and y[i][0] == 1:
+			if pred[i][0] > 0.5 and y[i][0] == 1:
 				continue
 			
-			if pred[i][0] > 0 and y[i][0] == 0:
+			if pred[i][0] < 0.5 and y[i][0] == 0:
 				continue
 			
 			error += 1

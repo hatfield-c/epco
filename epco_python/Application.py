@@ -3,6 +3,7 @@ import CONFIG
 import DataLoader
 import Trainer
 import Model
+import Renderer
 
 def main():
 	
@@ -10,6 +11,8 @@ def main():
 	model = Model.Model(CONFIG.sizes).cuda()
 	trainer = Trainer.Trainer()
 	
-	trainer.Train(model, dataLoader)	
+	trainer.Train(model, dataLoader)
+	
+	Renderer.Render(model)
 
 main()
