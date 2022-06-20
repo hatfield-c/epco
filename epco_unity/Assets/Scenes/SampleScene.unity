@@ -837,8 +837,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   streamManager: {fileID: 24569014}
   constraintManager: {fileID: 635490088}
-  samples: 500
   filePath: Training/train.txt
+  samples: 10000
 --- !u!1 &1231409195
 GameObject:
   m_ObjectHideFlags: 0

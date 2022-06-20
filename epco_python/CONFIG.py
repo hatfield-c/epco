@@ -4,7 +4,8 @@
 ############################
 train_path = "train.txt"
 
-img_path = "model_space.png"
+img_path = "render/model_space.png"
+
 
 ############################
 #	HYPER PARAMETERS

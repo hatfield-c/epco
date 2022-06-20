@@ -5,6 +5,7 @@ import torch.optim as optim
 
 import CONFIG
 import Metrics
+import Renderer
 
 class Trainer:
 	def __init__(self):
@@ -18,6 +19,8 @@ class Trainer:
 		
 		avgTime = 1
 		start_total = time.time()
+	
+		Renderer.Render(model, "start")
 	
 		for e in range(CONFIG.epochs):
 			remaining_epochs = CONFIG.epochs - e - 1
@@ -47,14 +50,18 @@ class Trainer:
 					
 					print("   [", b, "/", CONFIG.epoch_size - 1, ":", completion,  "]")
 					print("    Loss	 :", loss.item())
-					print("    Accuracy :", metrics.Accuracy(orig_x, orig_y, model))
+					#print("    Accuracy :", metrics.Accuracy(orig_x, orig_y, model))
 					print("")
 					print("    Batches left :", remaining_batches)
 					print("    Avg. Time    :", "{:.2f}".format(avgTime), "s")
 					print("    ETA	      :", eta, "mins")
 					print("\n")
 					
+				Renderer.Render(model, str(e) + "-" + str(b))
+					
 				avgTime = (avgTime + (time.time() - start_b)) / 2
+				
+			
 				
 		print("\nCompleted in", int((time.time() - start_total) / 60), "minutes.")
 		print("Final loss:", loss.item())

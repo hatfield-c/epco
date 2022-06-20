@@ -6,7 +6,7 @@ import torch
 
 import CONFIG
 
-def Render(model):
+def Render(model, render_index = None):
 	start = time.time()
 	
 	img = np.zeros(shape = CONFIG.img_size)
@@ -43,9 +43,16 @@ def Render(model):
 			
 			img[CONFIG.img_size[0] - i - 1, j] = 1
 	
-	cv2.imwrite(CONFIG.img_path, 255 * img)
+	path = CONFIG.img_path
+	
+	if index is not None:
+		path = CONFIG.img_path[:-4]
+		path += "_" + str(render_index) + ".png"
+		
+	cv2.imwrite(path, 255 * img)
 	
 	print("Render time:", time.time() - start)
 	
-	cv2.imshow('image', img)
-	cv2.waitKey(0)
+	if index is None:
+		cv2.imshow('image', img)
+		cv2.waitKey(0)
