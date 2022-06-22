@@ -40,3 +40,17 @@ img_size = [ int(y_width * img_scale), int(x_width * img_scale) ]
 
 y_step = y_width / img_size[0]
 x_step = x_width / img_size[1]
+
+############################
+#	TCP Parameters
+############################
+
+ip_addr = "localhost"
+port = '7777'
+tcp_buffer = 1024
+
+#TCP_IP_ADDR = 'localhost'
+#TCP_PORT_TO_UNITY = '4042'
+#TCP_PORT_TO_SUMO = '4043'
+
+#TCP_BUFFER = 1024
