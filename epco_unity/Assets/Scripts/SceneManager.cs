@@ -14,10 +14,26 @@ public class SceneManager : MonoBehaviour
     [SerializeField]
     protected TrainGenerator trainGenerator = null;
 
+    [SerializeField]
+    protected TcpManager tcpManager = null;
+
+    [SerializeField]
+    protected EpcManager epcManager = null;
+
     void FixedUpdate() {
         //Debug.Log(
             //this.constraintManager.IsValid(this.streamManager.GetSources())
         //);
+    }
+
+    public void ActiveInference() {
+        if (!Application.isPlaying) {
+            Debug.LogError("Error: You must be in Play mode to enter Active Inference mode.");
+            return;
+        }
+
+        this.tcpManager.Init();
+        this.epcManager.Init(this.tcpManager);
     }
 
     public void RenderConstraintSpace() {

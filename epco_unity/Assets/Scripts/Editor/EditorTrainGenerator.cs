@@ -9,6 +9,12 @@ public class EditorTrainGenerator : Editor
 
         SceneManager manager = (SceneManager)this.target;
 
+        EditorGUILayout.LabelField("Active Inference", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("Enter Active Inference Mode")) {
+            manager.ActiveInference();
+        }
+
         EditorGUILayout.LabelField("Constraints", EditorStyles.boldLabel);
 
         if (GUILayout.Button("Render Constraint Space")) {

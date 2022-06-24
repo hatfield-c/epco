@@ -1,15 +1,25 @@
+############################
+#	ACTIONS
+############################
+action_train = 1
+action_render = 2
+action_train_render = 3
+action_inference = 4
+
+action = 4
 
 ############################
 #	PATHS
 ############################
+
 train_path = "train.txt"
 
 img_path = "render/model_space.png"
 
-
 ############################
 #	HYPER PARAMETERS
 ############################
+
 sizes = [ 2, 256, 256, 512, 512, 256, 256, 128, 64, 16, 8, 1 ]
 
 epochs = 200
@@ -46,11 +56,7 @@ x_step = x_width / img_size[1]
 ############################
 
 ip_addr = "localhost"
-port = '7777'
+to_unity_port = '4044'
+to_python_port = '4043'
 tcp_buffer = 1024
-
-#TCP_IP_ADDR = 'localhost'
-#TCP_PORT_TO_UNITY = '4042'
-#TCP_PORT_TO_SUMO = '4043'
-
-#TCP_BUFFER = 1024
+tcp_timeout = 30
