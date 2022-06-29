@@ -14,7 +14,12 @@ class Trainer:
 	def Train(self, model, dataLoader):
 		orig_x, orig_y = dataLoader.GetData()
 		
-		optimizer = optim.Adam(model.parameters(), lr = CONFIG.learning_rate)
+		optimizer = optim.Adam(
+			model.parameters(), 
+			lr = CONFIG.learning_rate, 
+			weight_decay = CONFIG.weight_decay
+		)
+		
 		metrics = Metrics.Metrics()
 		
 		avgTime = 1
@@ -38,7 +43,7 @@ class Trainer:
 				optimizer.zero_grad()
 				loss.backward()
 				optimizer.step()
-	
+
 				if self.shouldPrint_b(b) and self.shouldPrint_e(e):
 					remaining_batches = (CONFIG.epoch_size - b - 1) + (remaining_epochs * CONFIG.epoch_size)
 					eta = avgTime * remaining_batches
@@ -57,9 +62,13 @@ class Trainer:
 					print("    ETA	      :", eta, "mins")
 					print("\n")
 					
-				#Renderer.Render(model, str(e) + "-" + str(b))
+				if CONFIG.action == CONFIG.action_train_video:
+					Renderer.Render(model, str(e) + "-" + str(b))
 					
 				avgTime = (avgTime + (time.time() - start_b)) / 2
+				
+		#print("\nFinal weight magnitudes:")
+		#model.print_weight_magnitudes()
 				
 		print("\nCompleted in", int((time.time() - start_total) / 60), "minutes.")
 		print("Final loss:", loss.item())
