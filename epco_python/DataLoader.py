@@ -3,6 +3,8 @@ import torch
 import numpy as np
 import random
 
+import CONFIG
+
 class DataLoader:
 	def __init__(self, path):
 		self.path = path
@@ -21,7 +23,8 @@ class DataLoader:
 				1
 			)
 		)
-		
+		self.y = ((1 - (2 * CONFIG.label_smooth)) * self.y) + CONFIG.label_smooth
+
 		self.sampleCount = self.x.shape[0]
 	
 	def DrawSamples(self, sample_count):

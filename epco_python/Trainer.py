@@ -55,7 +55,7 @@ class Trainer:
 					
 					print("   [", b, "/", CONFIG.epoch_size - 1, ":", completion,  "]")
 					print("    Loss	 :", loss.item())
-					print("    Accuracy :", metrics.Accuracy(orig_x, orig_y, model))
+					#print("    Accuracy :", metrics.Accuracy(orig_x, orig_y, model))
 					print("")
 					print("    Batches left :", remaining_batches)
 					print("    Avg. Time    :", "{:.2f}".format(avgTime), "s")

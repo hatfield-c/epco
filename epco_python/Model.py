@@ -29,10 +29,10 @@ class Model(nn.Module):
 			linear = torch.nn.Linear(size, next_size).cuda()
 			linear = torch.nn.utils.weight_norm(linear)
 			
-			linear.weight_g.requires_grad = False
+			#linear.weight_g.requires_grad = False
 			
-			for j in range(linear.weight_g.shape[0]):
-				linear.weight_g[j] = 1
+			#for j in range(linear.weight_g.shape[0]):
+			#	linear.weight_g[j] = 1
 			
 			activation = None
 			if i == self.depth - 1:

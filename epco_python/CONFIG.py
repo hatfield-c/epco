@@ -23,8 +23,8 @@ train_path = "train.txt"
 img_path = "render/model_space.png"
 video_path = "render/frames/f"
 
-model_save_path = "models/example_l2_norm"
-model_load_path = "models/example_l2_norm"
+model_save_path = "models/all-smooth-mid"
+model_load_path = "models/all-smooth-mod"
 
 ############################
 #	HYPER PARAMETERS
@@ -36,8 +36,10 @@ sizes = [ 2, 256, 256, 512, 512, 256, 256, 128, 64, 16, 8, 1 ]
 epochs = 200
 batch_size = 128
 epoch_size = 50
-learning_rate = 0.001
-weight_decay = 0#.0001
+learning_rate = 1e-3
+weight_decay = 1e-8
+
+label_smooth = 1e-3
 
 ############################
 #	TRAINING OUTPUT
@@ -50,17 +52,17 @@ print_every_batch = 25
 #	RENDER PARAMETERS
 ############################
 
-#render_bot_threshold = -40
-#render_low_threshold = -10
-#render_mid_threshold = 0.0
-#render_high_threshold = 10
-#render_top_threshold = 20
+#render_bot_threshold = 0
+#render_low_threshold = -25
+#render_mid_threshold = 0.5
+#render_high_threshold = 0.75
+#render_top_threshold = 1
 
-render_bot_threshold = 0
-render_low_threshold = 0.25
-render_mid_threshold = 0.5
-render_high_threshold = 0.999
-render_top_threshold = 1
+render_bot_threshold = -30
+render_low_threshold = -10
+render_mid_threshold = 0
+render_high_threshold = 8.55
+render_top_threshold = 8.8
 
 render_bot_color = np.array((0, 0, 0))
 render_low_color = np.array((0, 0, 255))

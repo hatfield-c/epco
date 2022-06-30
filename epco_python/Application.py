@@ -29,7 +29,7 @@ def main():
 		Renderer.Render(model)
 		
 	if CONFIG.action == CONFIG.action_load_render:
-		model = Model.Model(CONFIG.sizes, True).cuda()
+		model = Model.Model(CONFIG.sizes, False).cuda()
 		model.load_state_dict(torch.load(CONFIG.model_save_path))
 		model.eval()
 		
