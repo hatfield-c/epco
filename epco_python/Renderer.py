@@ -6,10 +6,37 @@ import torch
 
 import CONFIG
 
-def Render(model, render_index = None):
-	start = time.time()
+def GetNewCanvas():
+	return np.zeros(shape = CONFIG.render_shape)
+
+def SaveFrame(canvas, render_index = None):
+	path = CONFIG.img_path
 	
-	img = np.zeros(shape = CONFIG.render_shape)
+	if render_index is not None:
+		path = CONFIG.video_path + "_" + str(render_index) + ".png"
+	
+	cv2.imwrite(path, canvas)
+
+def RenderPoints(points, canvas):
+	for point in points:
+		y = point[0]
+		x = point[1]
+		
+		i = int(y / CONFIG.y_step)
+		j = int(x / CONFIG.x_step)
+		
+		i = max (0, i)
+		i = min(i, CONFIG.img_size[0] - 1)
+		
+		j = max(0, j)
+		j = min(i, CONFIG.img_size[1] - 1)
+		
+		canvas[CONFIG.img_size[0] - i - 1, j] = CONFIG.render_point_color
+		
+	return canvas
+
+def RenderPField(model, canvas):
+	start = time.time()
 	
 	positions = []
 	pixels = {}
@@ -48,27 +75,22 @@ def Render(model, render_index = None):
 		
 		avg_val = (avg_val + pred) / 2
 		
-		pix_color = GetColor(pred)
+		pix_color = GetPColor(pred)
 		
 		i = pixel_pos[0]
 		j = pixel_pos[1]
 		
-		img[CONFIG.img_size[0] - i - 1, j] = pix_color
-		
-	path = CONFIG.img_path
+		canvas[CONFIG.img_size[0] - i - 1, j] = pix_color
 	
-	if render_index is not None:
-		path = CONFIG.video_path + "_" + str(render_index) + ".png"
-	
-	if render_index is None:
+	if CONFIG.render_debug:
 		print("\nMax Pred:", max_val)
 		print("Min Pred:", min_val)
 		print("Avg Pred:", avg_val)
 		print("Render time:", time.time() - start)
 		
-	cv2.imwrite(path, img)
+	return canvas
 	
-def GetColor(val):
+def GetPColor(val):
 	
 	if val <= CONFIG.render_bot_threshold:
 		return CONFIG.render_bot_color

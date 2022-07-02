@@ -3,6 +3,7 @@ import numpy as np
 ############################
 #	ACTIONS
 ############################
+action_playground = -1
 action_train_save = 1
 action_load_render = 2
 action_train_render = 3
@@ -11,8 +12,9 @@ action_train_video = 5
 action_inference = 6
 
 #action = action_train_video
-action = action_load_render
+#action = action_load_render
 #action = action_train_save
+action = action_playground
 
 ############################
 #	PATHS
@@ -52,23 +54,27 @@ print_every_batch = 25
 #	RENDER PARAMETERS
 ############################
 
-#render_bot_threshold = 0
-#render_low_threshold = -25
-#render_mid_threshold = 0.5
-#render_high_threshold = 0.75
-#render_top_threshold = 1
+render_debug = True
 
-render_bot_threshold = -30
-render_low_threshold = -10
-render_mid_threshold = 0
-render_high_threshold = 8.55
-render_top_threshold = 8.8
+render_bot_threshold = 0
+render_low_threshold = -25
+render_mid_threshold = 0.5
+render_high_threshold = 0.75
+render_top_threshold = 1
+
+#render_bot_threshold = -30
+#render_low_threshold = -10
+#render_mid_threshold = 0
+#render_high_threshold = 8.55
+#render_top_threshold = 8.8
 
 render_bot_color = np.array((0, 0, 0))
 render_low_color = np.array((0, 0, 255))
 render_mid_color = np.array((255, 0, 0))
 render_high_color = np.array((0, 255, 0))
 render_top_color = np.array((255, 255, 255))
+
+render_point_color = np.array((0, 255, 255))
 
 y_domain = [ -1, 8 ]
 x_domain = [ -1, 11 ]

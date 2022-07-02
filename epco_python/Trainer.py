@@ -63,7 +63,11 @@ class Trainer:
 					print("\n")
 					
 				if CONFIG.action == CONFIG.action_train_video:
-					Renderer.Render(model, str(e) + "-" + str(b))
+					render_index = str(e) + "-" + str(b)
+					
+					canvas = Renderer.GetNewCanvas()
+					canvas = Renderer.RenderPField(model, canvas)
+					Renderer.SaveFrame(canvas, render_index)
 					
 				avgTime = (avgTime + (time.time() - start_b)) / 2
 				
