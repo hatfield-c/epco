@@ -12,25 +12,33 @@ class Trainer:
 		pass
 	
 	def Train(self, model, dataLoader):
-		orig_x, orig_y = dataLoader.GetData()
+		loss_func = nn.BCELoss()
+	
+		self.TrainPhase(model, dataLoader, loss_func, CONFIG.epoch_list[0])
 		
+		#model.SetMode(CONFIG.model_mode_smooth)
+		#self.TrainPhase(model, dataLoader, loss_func, CONFIG.epoch_list[1])
+		
+		#model.SetMode(CONFIG.model_mode_separator)
+		#self.TrainPhase(model, dataLoader, loss_func, CONFIG.epoch_list[2])
+	
+	def TrainPhase(self, model, dataLoader, loss_func, epochs):	
 		optimizer = optim.Adam(
 			model.parameters(), 
 			lr = CONFIG.learning_rate, 
 			weight_decay = CONFIG.weight_decay
 		)
 		
-		metrics = Metrics.Metrics()
-		
 		avgTime = 1
 		start_total = time.time()
 	
-		Renderer.Render(model, "start")
+		canvas = Renderer.GetNewCanvas()
+		canvas = Renderer.RenderPField(model, canvas)
+		Renderer.SaveFrame(canvas)
 	
-		for e in range(CONFIG.epochs):
-			remaining_epochs = CONFIG.epochs - e - 1
+		for e in range(epochs):
 			
-			if self.shouldPrint_e(e):
+			if self.ShouldPrint_E(epochs, e):
 				print("\nEpoch:", e)
 			
 			for b in range(CONFIG.epoch_size):
@@ -39,28 +47,12 @@ class Trainer:
 				batch_data, batch_targets = dataLoader.DrawSamples(CONFIG.batch_size)
 				
 				preds = model(batch_data)
-				loss = nn.BCELoss()(preds, batch_targets)
+				loss = loss_func(preds, batch_targets)
 				optimizer.zero_grad()
 				loss.backward()
 				optimizer.step()
-
-				if self.shouldPrint_b(b) and self.shouldPrint_e(e):
-					remaining_batches = (CONFIG.epoch_size - b - 1) + (remaining_epochs * CONFIG.epoch_size)
-					eta = avgTime * remaining_batches
-					eta = str(eta / 60)
-					eta = eta
-					
-					completion = str(100 *(b / (CONFIG.epoch_size)))
-					completion = completion[:4] + "%"
-					
-					print("   [", b, "/", CONFIG.epoch_size - 1, ":", completion,  "]")
-					print("    Loss	 :", loss.item())
-					#print("    Accuracy :", metrics.Accuracy(orig_x, orig_y, model))
-					print("")
-					print("    Batches left :", remaining_batches)
-					print("    Avg. Time    :", "{:.2f}".format(avgTime), "s")
-					print("    ETA	      :", eta, "mins")
-					print("\n")
+ 
+				self.PrintUpdate(epochs, e, b, avgTime, loss)
 					
 				if CONFIG.action == CONFIG.action_train_video:
 					render_index = str(e) + "-" + str(b)
@@ -70,23 +62,40 @@ class Trainer:
 					Renderer.SaveFrame(canvas, render_index)
 					
 				avgTime = (avgTime + (time.time() - start_b)) / 2
-				
-		#print("\nFinal weight magnitudes:")
-		#model.print_weight_magnitudes()
-				
+
 		print("\nCompleted in", int((time.time() - start_total) / 60), "minutes.")
 		print("Final loss:", loss.item())
 			
 		return model
 	
-	def shouldPrint_e(self, e):
-		if CONFIG.epochs < CONFIG.print_every_epoch:
+	def PrintUpdate(self, epochs, e, b, avgTime, loss):
+		remaining_epochs = epochs - e - 1
+		
+		if self.ShouldPrint_B(epochs, b) and self.ShouldPrint_E(epochs, e):
+			remaining_batches = (CONFIG.epoch_size - b - 1) + (remaining_epochs * CONFIG.epoch_size)
+			eta = avgTime * remaining_batches
+			eta = str(eta / 60)
+			eta = eta
+			
+			completion = str(100 *(b / (CONFIG.epoch_size)))
+			completion = completion[:4] + "%"
+			
+			print("   [", b, "/", CONFIG.epoch_size - 1, ":", completion,  "]")
+			print("    Loss	 :", loss.item())
+			print("")
+			print("    Batches left :", remaining_batches)
+			print("    Avg. Time    :", "{:.2f}".format(avgTime), "s")
+			print("    ETA	      :", eta, "mins")
+			print("\n")
+	
+	def ShouldPrint_E(self, epochs, e):
+		if epochs < CONFIG.print_every_epoch:
 			return True
 		
 		return e % CONFIG.print_every_epoch == 0 or e == CONFIG.epochs - 1
 	
-	def shouldPrint_b(self, b):
-		if CONFIG.epoch_size < CONFIG.print_every_batch:
+	def ShouldPrint_B(self, epochs, b):
+		if epochs < CONFIG.print_every_batch:
 			return True
 		
 		return b % CONFIG.print_every_batch == 0 or b == CONFIG.epoch_size - 1

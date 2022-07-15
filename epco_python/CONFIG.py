@@ -13,8 +13,8 @@ action_inference = 6
 
 #action = action_train_video
 #action = action_load_render
-#action = action_train_save
-action = action_playground
+action = action_train_save
+#action = action_playground
 
 ############################
 #	PATHS
@@ -25,23 +25,33 @@ train_path = "train.txt"
 img_path = "render/model_space.png"
 video_path = "render/frames/f"
 
-model_save_path = "models/all-smooth-mid"
-model_load_path = "models/all-smooth-mod"
+model_save_path = "models/test"
+model_load_path = "models/all-smooth-mid"
 
 ############################
 #	HYPER PARAMETERS
 ############################
 
 sizes = [ 2, 256, 256, 512, 512, 256, 256, 128, 64, 16, 8, 1 ]
-#sizes = [ 2, 6, 256, 512, 512, 256, 256, 128, 64, 16, 8, 1 ]
+#epochs = [ 200,  ]
+epoch_list = [ 5, 5, 5 ]
 
-epochs = 200
 batch_size = 128
 epoch_size = 50
 learning_rate = 1e-3
 weight_decay = 1e-8
 
 label_smooth = 1e-3
+
+y_domain = [ -1, 8 ]
+x_domain = [ -1, 11 ]
+
+############################
+#	MODEL PARAMETERS
+############################
+
+model_mode_separator = "SEPARATOR"
+model_mode_smooth = "SMOOTH"
 
 ############################
 #	TRAINING OUTPUT
@@ -76,8 +86,7 @@ render_top_color = np.array((255, 255, 255))
 
 render_point_color = np.array((0, 255, 255))
 
-y_domain = [ -1, 8 ]
-x_domain = [ -1, 11 ]
+
 
 y_width = y_domain[1] - y_domain[0]
 x_width = x_domain[1] - x_domain[0]

@@ -5,7 +5,7 @@ import random
 
 import CONFIG
 
-class DataLoader:
+class SeparatorData:
 	def __init__(self, path):
 		self.path = path
 		
@@ -26,25 +26,23 @@ class DataLoader:
 		self.y = ((1 - (2 * CONFIG.label_smooth)) * self.y) + CONFIG.label_smooth
 
 		self.sampleCount = self.x.shape[0]
+		
+		self.x_torch = torch.from_numpy(self.x).float().cuda()
+		self.y_torch = torch.from_numpy(self.y).float().cuda()
+		self.torch_data = (self.x_torch, self.y_torch)
+	
+		self.all_indices = range(self.Count())
 	
 	def DrawSamples(self, sample_count):
-		all_indices = range(self.sampleCount)
-		chosen_indices = random.sample(all_indices, sample_count)
+		chosen_indices = random.sample(self.all_indices, sample_count)
 		
-		chosen_x = self.x[chosen_indices]
-		
-		chosen_y = self.y[chosen_indices]
-		
-		chosen_x = torch.from_numpy(chosen_x).float().cuda()
-		chosen_y = torch.from_numpy(chosen_y).float().cuda()
+		chosen_x = self.x_torch[chosen_indices]		
+		chosen_y = self.y_torch[chosen_indices]
 		
 		return (chosen_x, chosen_y)
 
 	def GetData(self):
-		x = torch.from_numpy(self.x).float().cuda()
-		y = torch.from_numpy(self.y).float().cuda()
-		
-		return (x, y)
+		return self.torch_data
 
 	def Count(self):
 		return self.x.shape[0]

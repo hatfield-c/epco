@@ -1,14 +1,8 @@
-
-#import scipy.sparse as spa
-
 import torch
 import torch.nn as nn
 import numpy as np
 
-#from torch.autograd import Variable
-#from torch.nn.parameter import Parameter
-
-#import Parameters
+import CONFIG
 
 class Model(nn.Module):
 	def __init__(self, sizes, isTraining = True):
@@ -47,6 +41,8 @@ class Model(nn.Module):
 
 		self.moduleList = torch.nn.ModuleList(self.layers);
 		
+		self.model_mode = CONFIG.model_mode_separator
+		
 		#for p in self._parameters:
 			#print(p)
 		#print(self.linear_layers[0].weight_g)
@@ -67,7 +63,10 @@ class Model(nn.Module):
 
 		return result
 
-	def print_weight_magnitudes(self):
+	def SetMode(self, mode):
+		self.model_mode = mode
+
+	def PrintWeightMagnitudes(self):
 		for i in range(len(self.linear_layers)):
 			layer = self.linear_layers[i]
 			

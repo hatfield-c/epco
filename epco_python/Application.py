@@ -1,6 +1,6 @@
 
 import CONFIG
-import DataLoader
+import SeparatorData
 import Trainer
 import Model
 import Renderer
@@ -25,16 +25,16 @@ def main():
 		Renderer.SaveFrame(canvas)
 	
 	if CONFIG.action == CONFIG.action_train_save or CONFIG.action == CONFIG.action_train_video:
-		dataLoader = DataLoader.DataLoader(CONFIG.train_path)
+		dataLoader = SeparatorData.SeparatorData(CONFIG.train_path)
 		model = Model.Model(CONFIG.sizes).cuda()
 		trainer = Trainer.Trainer()
 		
-		model = trainer.Train(model, dataLoader)
+		trainer.Train(model, dataLoader)
 		
 		torch.save(model.state_dict(), CONFIG.model_save_path)
 	
 	if CONFIG.action == CONFIG.action_train_render:
-		dataLoader = DataLoader.DataLoader(CONFIG.train_path)
+		dataLoader = SeparatorData.SeparatorData(CONFIG.train_path)
 		model = Model.Model(CONFIG.sizes).cuda()
 		trainer = Trainer.Trainer()
 		
